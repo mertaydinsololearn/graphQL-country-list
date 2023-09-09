@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import 'semantic-ui-css/semantic.min.css'
+
 
 export default function ClickableListItem({ bgColor, info, idx, onClick, prevColor, selectedIdx, selectedName }) {
    const [backGroundColor, setBackgroundColor] = useState("");
@@ -22,10 +24,13 @@ export default function ClickableListItem({ bgColor, info, idx, onClick, prevCol
     
 
     return (
-        <>
-             <li style={{ cursor: 'pointer', backgroundColor: backGroundColor}} onClick={handleClick}>
-                <b>Name: {info.name}</b> / <b>Capital: {info.capital}</b> / <b>Currency: {info.currency}</b> / <b>Flag</b>: {info.emoji}
-             </li> <hr/>
-        </>
+          <div  onClick={handleClick} className="item" style={{ cursor: 'pointer', backgroundColor: backGroundColor, paddingLeft: "10px"}} >
+                <i>{info.flag}</i>
+                <div className="content">
+                  <a className="header">{info.emoji}</a>
+                   <div className="description">Name: {info.name} / Capital: {info.capital} / 
+                        Currency: {info.currency} / Language: {info.languages[0] && info.languages[0].name} </div>
+                     </div>
+            </div>
     );
 }

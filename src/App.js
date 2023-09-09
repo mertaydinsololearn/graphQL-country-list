@@ -57,15 +57,25 @@ export default function App() {
   }
 
   let groupedCountries;
-  if (group && group === "currency") {
+  if (group && (group === "currency" || group === "language")) {
     groupedCountries = {};
-    filteredCountries.forEach(country => {
-      const currency = country.currency;
-      if (!groupedCountries[currency]) {
-        groupedCountries[currency] = [];
-      }
-      groupedCountries[currency].push(country);
-    });
+    if (group === "currency") {
+      filteredCountries.forEach(country => {
+        const currency = country.currency;
+        if (!groupedCountries[currency]) {
+          groupedCountries[currency] = [];
+        }
+        groupedCountries[currency].push(country);
+      });
+    } else  {
+      filteredCountries.forEach(country => {
+        const language = country.languages[0]  ? country.languages[0].name : 'none';
+        if (!groupedCountries[language]) {
+          groupedCountries[language] = [];
+        }
+        groupedCountries[language].push(country);
+      });
+    }
   }
 
   useEffect(() => {
@@ -93,13 +103,17 @@ export default function App() {
 
   return (
     <div>
-      <h1  style={{marginLeft:"10px"}}>GraphQL List</h1>
+      <h1 className="ui header"  style={{marginLeft:"10px", paddingTop:"10px"}}>GraphQL List</h1>
       <p style={{marginLeft:"10px"}}>You can input search:countryName to filter countries with their names and group them by 
-        using group:currency / Example: name:qatar group:currency
+        using group:currency / <br />Example: name:qatar group:currency || group:language
       </p>
       <label style={{marginRight: "10px", marginLeft:"10px"}}>Filter:</label>
-      <input type="text" value={text} onInput={(e) => {setText(e.target.value); setClick(false)}} />
-      <ul>
+      <div className="ui icon input">
+        <input type="text" value={text} onInput={(e) => {setText(e.target.value); setClick(false)}}
+          placeholder="Search..." />
+         <i className="inverted circular search link icon"></i>
+      </div>
+      <div className="ui relaxed divided list">
         {groupedCountries ? 
           Object.entries(groupedCountries).map(([currency, countries], idx) =>
             countries.map((info, subIdx) => {
@@ -137,7 +151,7 @@ export default function App() {
             );
           })
         }
-      </ul>
+        </div>
     </div>
   );
 }
