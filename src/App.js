@@ -4,6 +4,7 @@ import { useState, useEffect} from "react";
 import 'semantic-ui-css/semantic.min.css'
 import Spinner from './components/Spinner';
 import  ClickableListItem from './components/ClickableListItem';
+import Message from './components/Message';
 
 const COUNTRIES_QUERY = gql`
 {
@@ -83,7 +84,7 @@ export default function App() {
       const length = filteredCountries.length > 10 ? 10: filteredCountries.length;
 
       if (selectedName === filteredCountries[length - 1].name && selectedIdx === length) return;
-      const colorList = ["gray", "blue", "#40E0D0", "#2E8B57"];
+      const colorList = ["gray", "#8FBC8F", "#40E0D0", "#2E8B57"];
       let random = Math.floor(Math.random() * colorList.length);
       while (colorList[random] === previousColor) {
           random = Math.floor(Math.random() * colorList.length);
@@ -103,14 +104,13 @@ export default function App() {
 
   return (
     <div>
-      <h1 className="ui header"  style={{marginLeft:"10px", paddingTop:"10px"}}>GraphQL List</h1>
-      <p style={{marginLeft:"10px"}}>You can input search:countryName to filter countries with their names and group them by 
-        using group:currency / <br />Example: name:qatar group:currency || group:language
-      </p>
+      <h1 className="ui header"  style={{marginLeft:"10px", paddingTop:"10px"}}>Country List</h1>
+      <Message header="Note">You can input search:countryName to filter countries with their names and group them by 
+         using group:currency  || group:language <br />Example: name:qatar group:currency || group:language</Message>
       <label style={{marginRight: "10px", marginLeft:"10px"}}>Filter:</label>
       <div className="ui icon input">
         <input type="text" value={text} onInput={(e) => {setText(e.target.value); setClick(false)}}
-          placeholder="Search..." />
+          placeholder="search:france" />
          <i className="inverted circular search link icon"></i>
       </div>
       <div className="ui relaxed divided list">

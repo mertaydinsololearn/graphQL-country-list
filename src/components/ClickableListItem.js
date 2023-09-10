@@ -4,7 +4,7 @@ import 'semantic-ui-css/semantic.min.css'
 
 export default function ClickableListItem({ bgColor, info, idx, onClick, prevColor, selectedIdx, selectedName }) {
    const [backGroundColor, setBackgroundColor] = useState("");
-    const colorList = ["gray", "blue", "#40E0D0", "#2E8B57"];
+    const colorList = ["gray", "#8FBC8F", "#40E0D0", "#2E8B57"];
     useEffect(() => {
         if (idx === selectedIdx) {
             setBackgroundColor(prevColor);
