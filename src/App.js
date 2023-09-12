@@ -5,7 +5,7 @@ import 'semantic-ui-css/semantic.min.css'
 import Spinner from './components/Spinner';
 import { Input, Icon } from 'semantic-ui-react';
 import  ClickableListItem from './components/ClickableListItem';
-import Message from './components/Message';
+import DismissableMessage from './components/DismissableMessage';
 
 const COUNTRIES_QUERY = gql`
 {
@@ -107,13 +107,12 @@ export default function App() {
       <h1 className="ui header"  style={{marginLeft:"10px", paddingTop:"10px"}}>Country List</h1>
       {
         error &&    
-          <Message negative>
-             <Message.Header>Veritabanında bir hata oluştu!</Message.Header>
-             <p>Lütfen kısa bir süre sonra tekrar deneyin</p>
-         </Message>
+          <DismissableMessage negative   header="Veritabanında bir hata oluştu!">
+             Lütfen kısa bir süre sonra tekrar deneyin
+         </DismissableMessage>
       }
-      <Message header="Note">You can input search:countryName to filter countries with their names and group them by 
-         using group:currency  || group:language <br />Example: name:qatar group:currency || group:language</Message>
+      <DismissableMessage header="Note">You can input search:countryName to filter countries with their names and group them by 
+         using group:currency  || group:language <br />Example: name:qatar group:currency || group:language</DismissableMessage>
       <label style={{marginRight: "10px", marginLeft:"10px"}}>Filter:</label>
       <div className="ui icon input">
         <Input 
