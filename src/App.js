@@ -3,6 +3,7 @@ import { useQuery, gql } from "@apollo/client";
 import { useState, useEffect} from "react";
 import 'semantic-ui-css/semantic.min.css'
 import Spinner from './components/Spinner';
+import { Input, Icon } from 'semantic-ui-react';
 import  ClickableListItem from './components/ClickableListItem';
 import Message from './components/Message';
 
@@ -98,22 +99,31 @@ export default function App() {
   }, [filteredCountries, group]);
 
   if (loading) return <Spinner />
-  if (error) return <pre>{error.message}</pre>
 
   let counter = [1];
 
   return (
     <div>
       <h1 className="ui header"  style={{marginLeft:"10px", paddingTop:"10px"}}>Country List</h1>
+      {
+        error &&    
+          <Message negative>
+             <Message.Header>Veritabanında bir hata oluştu!</Message.Header>
+             <p>Lütfen kısa bir süre sonra tekrar deneyin</p>
+         </Message>
+      }
       <Message header="Note">You can input search:countryName to filter countries with their names and group them by 
          using group:currency  || group:language <br />Example: name:qatar group:currency || group:language</Message>
       <label style={{marginRight: "10px", marginLeft:"10px"}}>Filter:</label>
       <div className="ui icon input">
-        <input type="text" value={text} onInput={(e) => {setText(e.target.value); setClick(false)}}
-          placeholder="search:france" />
-         <i className="inverted circular search link icon"></i>
+        <Input 
+       icon={<Icon name='search' inverted circular link />}
+         value={text} onInput={(e) => {setText(e.target.value); setClick(false)}}
+          placeholder="search:france"/>
       </div>
-      <div className="ui relaxed divided list">
+      {
+        data && !error && 
+        <div className="ui relaxed divided list">
         {groupedCountries ? 
           Object.entries(groupedCountries).map(([currency, countries], idx) =>
             countries.map((info, subIdx) => {
@@ -152,6 +162,8 @@ export default function App() {
           })
         }
         </div>
+      }
+     
     </div>
   );
 }
