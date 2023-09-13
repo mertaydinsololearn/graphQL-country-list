@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import  ClickableListItem from './ClickableListItem';
 import { List } from 'semantic-ui-react';
+import "./css/CountryList.css"
 
 export default function CountryList({ text, setClick, data, click  }) {
     const [selectedIdx, setSelectedIdx] = useState(null);
