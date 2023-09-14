@@ -30,9 +30,9 @@ export default function CountryList({ text, setClick, data, click  }) {
   }
 
   let groupedCountries;
-  if (group && (group === "currency" || group === "language")) {
+  if (group && (group.toLowerCase() === "currency" || group.toLowerCase() === "language")) {
     groupedCountries = {};
-    if (group === "currency") {
+    if (group.toLowerCase() === "currency") {
       filteredCountries.forEach(country => {
         const currency = country.currency;
         if (!groupedCountries[currency]) {
