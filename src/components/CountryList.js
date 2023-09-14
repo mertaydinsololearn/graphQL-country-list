@@ -4,22 +4,17 @@ import { List } from 'semantic-ui-react';
 import "./css/CountryList.css"
 
 export default function CountryList({ text, setClick, data, click  }) {
-    const [selectedIdx, setSelectedIdx] = useState(null);
     const [selectedName, setSelectedName] = useState(null);
     const [previousColor, setPreviousColor] = useState("orange");
-   
-    let counter = [1];
-    const {search , group} = extractText(text);
+       const {search , group} = extractText(text);
 
-    const handleClick = (color, idx, name) => {
-        if (selectedIdx !== idx) {
-          setSelectedIdx(idx);
+    const handleClick = (color, name) => {
+        if (name !== selectedName) {
           setPreviousColor(color);
           setSelectedName(name);
           setClick(true);
         }
         else {
-          setSelectedIdx(null);
           setSelectedName(null);
           setClick(true);
         }
@@ -58,21 +53,47 @@ export default function CountryList({ text, setClick, data, click  }) {
 
   useEffect(() => {
     if (filteredCountries && filteredCountries.length && !click) {
-      const length = filteredCountries.length > 10 ? 10: filteredCountries.length;
+      if (group && (group.toLowerCase()  === "currency" || group.toLowerCase() === "language")) {
+        let currentName;
+        let counter = 0;
+        let found = false;
+          Object.values(groupedCountries).map((countryList) => {
+            if (!found && counter + countryList.length <= 10) {
+              counter += countryList.length;
+              currentName = countryList[countryList.length - 1].name;
+              if (counter === 10) found = true;
+            }
+            else if (!found) {
+              currentName = countryList[(10 - counter - 1)].name;
+              found = true;
+            }
+          });
+          if (selectedName === currentName) return;
+          const colorList = ["gray", "#8FBC8F", "#40E0D0", "#2E8B57"];
+          let random = Math.floor(Math.random() * colorList.length);
+          while (colorList[random] === previousColor) {
+              random = Math.floor(Math.random() * colorList.length);
+          }
+          setPreviousColor(colorList[random]);
+          setSelectedName(currentName);
+          setClick(false);
 
-      if (selectedName === filteredCountries[length - 1].name && selectedIdx === length) return;
-      const colorList = ["gray", "#8FBC8F", "#40E0D0", "#2E8B57"];
-      let random = Math.floor(Math.random() * colorList.length);
-      while (colorList[random] === previousColor) {
-          random = Math.floor(Math.random() * colorList.length);
+      } else {
+        const length = filteredCountries.length > 10 ? 10: filteredCountries.length;
+
+        if (selectedName === filteredCountries[length - 1].name) return;
+        const colorList = ["gray", "#8FBC8F", "#40E0D0", "#2E8B57"];
+        let random = Math.floor(Math.random() * colorList.length);
+        while (colorList[random] === previousColor) {
+            random = Math.floor(Math.random() * colorList.length);
+        }
+        setPreviousColor(colorList[random]);
+        setSelectedName(filteredCountries[length - 1].name);
+        setClick(false);
       }
-      setPreviousColor(colorList[random]);
-      setSelectedIdx(length);
-      setSelectedName(filteredCountries[length - 1].name);
-      setClick(false);
       
     }
-  }, [filteredCountries, group]);
+  }, [search, group]);
 
     return (
         <List divided verticalAlign='middle'>
@@ -80,20 +101,17 @@ export default function CountryList({ text, setClick, data, click  }) {
           Object.entries(groupedCountries).map(([currency, countries], idx)=>
             countries.map((info) => {
               const bgColor = "#FFFAFA";
-              const listIdx = counter[0];
-              counter[0] += 1;
               return (
                 <List.Item>
                 <List.Content>
                   <ClickableListItem
                     key={info.name}
                     info={info}
-                    idx={listIdx}
                     onClick={handleClick}
                     bgColor={bgColor}
                     prevColor={previousColor}
-                    selectedIdx={selectedIdx}
                     selectedName={selectedName} 
+                    group={(group.toLowerCase()  === "currency" || group.toLowerCase() === "language")}
                   />
                  </List.Content>
                 </List.Item>
@@ -109,11 +127,9 @@ export default function CountryList({ text, setClick, data, click  }) {
                   <ClickableListItem
                     key={info.name}
                     info={info}
-                    idx={idx + 1}
                     onClick={handleClick}
                     bgColor={bgColor}
                     prevColor={previousColor}
-                    selectedIdx={selectedIdx} 
                     selectedName={selectedName}
                   />
                 </List.Content>
