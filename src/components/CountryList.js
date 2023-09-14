@@ -102,16 +102,14 @@ export default function CountryList({ text, setClick, data, click  }) {
             countries.map((info) => {
               const bgColor = "#FFFAFA";
               return (
-                <List.Item>
+                <List.Item key={info.name}>
                 <List.Content>
                   <ClickableListItem
-                    key={info.name}
                     info={info}
                     onClick={handleClick}
                     bgColor={bgColor}
                     prevColor={previousColor}
                     selectedName={selectedName} 
-                    group={(group.toLowerCase()  === "currency" || group.toLowerCase() === "language")}
                   />
                  </List.Content>
                 </List.Item>
@@ -122,7 +120,7 @@ export default function CountryList({ text, setClick, data, click  }) {
           filteredCountries.map((info, idx) => {
             const bgColor = "#FFFAFA";
             return (
-              <List.Item>
+              <List.Item key={info.name}>
                 <List.Content>
                   <ClickableListItem
                     key={info.name}
